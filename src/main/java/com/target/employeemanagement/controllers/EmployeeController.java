@@ -3,6 +3,7 @@ package com.target.employeemanagement.controllers;
 import com.target.employeemanagement.exceptions.EmployeeNotFoundException;
 import com.target.employeemanagement.exceptions.InvalidEmployeeException;
 import com.target.employeemanagement.models.Employee;
+import com.target.employeemanagement.models.EmployeeDTO;
 import com.target.employeemanagement.services.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "/get/{id}")
-    public Optional<Employee> getEmployeeById(@PathVariable(value = "id") String id) {
+    public Optional<Employee> getEmployeeById(@PathVariable(value = "id") Integer id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -55,12 +56,22 @@ public class EmployeeController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public String deleteEmployeeById(@PathVariable(value = "id") String id) throws EmployeeNotFoundException {
+    public String deleteEmployeeById(@PathVariable(value = "id") Integer id) throws EmployeeNotFoundException {
         return employeeService.deleteEmployeeById(id);
     }
 
     @DeleteMapping(value = "/deleteAll")
     public String deleteAllEmployees() {
         return employeeService.deleteAllEmployees();
+    }
+
+    @GetMapping(value = "/getWithAddress/{id}")
+    public EmployeeDTO getEmployeeWithAddress(@PathVariable(value = "id") Integer id) throws EmployeeNotFoundException {
+        return employeeService.getEmployeeWithAddressById(id);
+    }
+
+    @GetMapping(value = "/getAllWithAddress")
+    public List<EmployeeDTO> getAllEmployeesWithAddress() {
+        return employeeService.getAllEmployeesWithAddress();
     }
 }

@@ -13,13 +13,13 @@ public interface EmployeeService {
 
     public List<Employee> addEmployees(List<Employee> employees) throws InvalidEmployeeException;
 
-    public Optional<Employee> getEmployeeById(String id);
+    public Optional<Employee> getEmployeeById(Integer id);
 
     public List<Employee> getAllEmployees();
 
     public Employee updateEmployee(Employee e) throws EmployeeNotFoundException, InvalidEmployeeException;
 
-    public String deleteEmployeeById(String id) throws EmployeeNotFoundException;
+    public String deleteEmployeeById(Integer id) throws EmployeeNotFoundException;
 
     public String deleteAllEmployees();
 }

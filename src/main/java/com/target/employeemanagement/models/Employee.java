@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "employee")
 public class Employee {
     @Id
-    private String id;
+    private Integer id;
 
     private String firstName;
 
@@ -18,11 +18,11 @@ public class Employee {
 
     private int salary;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -87,7 +87,8 @@ public class Employee {
     }
 
     public boolean isEmployeeValid() {
-        return null != id && null != this.firstName && null != this.lastName && null != this.department &&
-                null != this.designation;
+        return null != this.firstName && !this.firstName.equals("") && null != this.lastName &&
+                !this.lastName.equals("") && null != this.department && !this.department.equals("") &&
+                null != this.designation && !this.designation.equals("");
     }
 }

@@ -5,10 +5,14 @@ import com.target.employeemanagement.dao.EmployeeDao;
 import com.target.employeemanagement.exceptions.EmployeeNotFoundException;
 import com.target.employeemanagement.exceptions.InvalidEmployeeException;
 import com.target.employeemanagement.models.Employee;
+import com.target.employeemanagement.models.EmployeeAddress;
+import com.target.employeemanagement.models.EmployeeDTO;
+import com.target.employeemanagement.services.EmployeeAddressService;
 import com.target.employeemanagement.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +21,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeDao employeeDao;
+
+    @Autowired
+    private EmployeeAddressService employeeAddressService;
 
     @Override
     public Employee addEmployee(Employee e) throws InvalidEmployeeException {
@@ -46,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Optional<Employee> getEmployeeById(String id) {
+    public Optional<Employee> getEmployeeById(Integer id) {
         return employeeDao.findById(id);
     }
 
@@ -71,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public String deleteEmployeeById(String id) throws EmployeeNotFoundException {
+    public String deleteEmployeeById(Integer id) throws EmployeeNotFoundException {
         Optional<Employee> emp = employeeDao.findById(id);
         if(emp.isPresent()) {
             employeeDao.deleteById(id);
@@ -85,5 +92,35 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String deleteAllEmployees() {
         employeeDao.deleteAll();
         return "All Employees deleted successfully!";
+    }
+
+
+    public EmployeeDTO getEmployeeWithAddressById(Integer id) throws EmployeeNotFoundException {
+        Optional<Employee> employee = employeeDao.findById(id);
+        if(employee.isPresent()) {
+            Employee e = employee.get();
+            EmployeeAddress employeeAddress = employeeAddressService.getEmployeeAddress(id);
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            employeeDTO.setEmployeeDetails(e);
+            employeeDTO.setAddress(employeeAddress.getAddress());
+            return employeeDTO;
+        } else {
+            throw new EmployeeNotFoundException();
+        }
+    }
+
+    public List<EmployeeDTO> getAllEmployeesWithAddress() {
+        List<Employee> employees = employeeDao.findAll();
+        List<EmployeeDTO> employeeDTOS = new ArrayList<EmployeeDTO>(employees.size());
+        for(Employee emp : employees) {
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            employeeDTO.setEmployeeDetails(emp);
+            EmployeeAddress employeeAddress = employeeAddressService.getEmployeeAddress(emp.getId());
+            if(null != employeeAddress) {
+                employeeDTO.setAddress(employeeAddress.getAddress());
+            }
+            employeeDTOS.add(employeeDTO);
+        }
+        return employeeDTOS;
     }
 }
