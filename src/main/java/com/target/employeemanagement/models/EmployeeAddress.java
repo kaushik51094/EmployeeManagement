@@ -5,8 +5,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmployeeAddress {
 
-    private String address;
     private Integer id;
+    private String address;
+
+    public EmployeeAddress() {}
+
+    public EmployeeAddress(Integer id, String address) {
+        this.id = id;
+        this.address = address;
+    }
 
     public Integer getId() {
         return id;

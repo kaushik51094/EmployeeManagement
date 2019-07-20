@@ -19,13 +19,15 @@ public class EmployeeAddressController {
     @Autowired
     private EmployeeAddressService employeeAddressService;
 
-    @PostMapping(value = "/add")
+    public EmployeeAddressController() { }
+
+    @PostMapping
     public EmployeeAddress addEmployeeAddress(@RequestBody EmployeeAddress employeeAddress)
             throws EmployeeNotFoundException, InvalidEmployeeAddressException {
         return employeeAddressService.addEmployeeAddress(employeeAddress);
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/{id}")
     public EmployeeAddress getEmployeeAddress(@PathVariable(value = "id") Integer id) {
         return employeeAddressService.getEmployeeAddress(id);
     }

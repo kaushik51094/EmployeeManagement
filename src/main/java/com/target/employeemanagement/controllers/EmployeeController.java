@@ -6,6 +6,7 @@ import com.target.employeemanagement.models.Employee;
 import com.target.employeemanagement.models.EmployeeDTO;
 import com.target.employeemanagement.services.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,53 +26,30 @@ public class EmployeeController {
     @Autowired
     private EmployeeServiceImpl employeeService;
 
-    @GetMapping("/hello")
-    public String greet() {
-        return "hi";
-    }
+    public EmployeeController() { }
 
-    @PostMapping(value = "/add")
+    @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) throws InvalidEmployeeException {
         return employeeService.addEmployee(employee);
     }
 
-    @PostMapping(value = "/addMultiple")
-    public List<Employee> createEmployees(@RequestBody List<Employee> employees) throws InvalidEmployeeException {
-        return employeeService.addEmployees(employees);
-    }
-
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/{id}")
     public Optional<Employee> getEmployeeById(@PathVariable(value = "id") Integer id) {
         return employeeService.getEmployeeById(id);
     }
 
-    @GetMapping(value = "/getAll")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
-    }
-
-    @PutMapping(value = "/update")
+    @PutMapping
     public Employee updateEmployeeById(@RequestBody Employee emp) throws InvalidEmployeeException, EmployeeNotFoundException {
         return employeeService.updateEmployee(emp);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public String deleteEmployeeById(@PathVariable(value = "id") Integer id) throws EmployeeNotFoundException {
         return employeeService.deleteEmployeeById(id);
     }
 
-    @DeleteMapping(value = "/deleteAll")
-    public String deleteAllEmployees() {
-        return employeeService.deleteAllEmployees();
-    }
-
-    @GetMapping(value = "/getWithAddress/{id}")
+    @GetMapping(value = "/withAddress/{id}")
     public EmployeeDTO getEmployeeWithAddress(@PathVariable(value = "id") Integer id) throws EmployeeNotFoundException {
         return employeeService.getEmployeeWithAddressById(id);
-    }
-
-    @GetMapping(value = "/getAllWithAddress")
-    public List<EmployeeDTO> getAllEmployeesWithAddress() {
-        return employeeService.getAllEmployeesWithAddress();
     }
 }

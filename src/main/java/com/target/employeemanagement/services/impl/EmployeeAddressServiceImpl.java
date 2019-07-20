@@ -25,6 +25,13 @@ public class EmployeeAddressServiceImpl implements EmployeeAddressService {
     @Autowired
     private EmployeeAddressConsumer employeeAddressConsumer;
 
+    /**
+     *
+     * @param employeeAddress Employee address.
+     * @return Employee address
+     * @throws EmployeeNotFoundException
+     * @throws InvalidEmployeeAddressException
+     */
     @Override
     public EmployeeAddress addEmployeeAddress(EmployeeAddress employeeAddress) throws EmployeeNotFoundException,
             InvalidEmployeeAddressException {
@@ -40,6 +47,11 @@ public class EmployeeAddressServiceImpl implements EmployeeAddressService {
         }
     }
 
+    /**
+     *
+     * @param id Employee ID.
+     * @return Employee address
+     */
     @Override
     public EmployeeAddress getEmployeeAddress(Integer id) {
         return employeeAddressConsumer.getAddress(id);

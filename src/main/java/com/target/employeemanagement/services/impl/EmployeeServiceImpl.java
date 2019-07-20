@@ -25,6 +25,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeAddressService employeeAddressService;
 
+    /**
+     *
+     * @param e employee.
+     * @return Employee
+     * @throws InvalidEmployeeException
+     */
     @Override
     public Employee addEmployee(Employee e) throws InvalidEmployeeException {
         if(e.isEmployeeValid()) {
@@ -34,6 +40,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     *
+     * @param employees List of employees.
+     * @return List of employees
+     * @throws InvalidEmployeeException
+     */
     @Override
     public List<Employee> addEmployees(List<Employee> employees) throws InvalidEmployeeException {
         boolean listContainsInvalidEmployee = false;
@@ -52,23 +64,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     *
+     * @param id employee ID.
+     * @return employee
+     */
     @Override
     public Optional<Employee> getEmployeeById(Integer id) {
         return employeeDao.findById(id);
     }
 
+    /**
+     *
+     * @return list of employees.
+     */
     @Override
     public List<Employee> getAllEmployees() {
         return employeeDao.findAll();
     }
 
+    /**
+     *
+     * @param e employee
+     * @return employee
+     * @throws EmployeeNotFoundException
+     * @throws InvalidEmployeeException
+     */
     @Override
     public Employee updateEmployee(Employee e) throws EmployeeNotFoundException, InvalidEmployeeException {
         Optional<Employee> employee = employeeDao.findById(e.getId());
         if(employee.isPresent()) {
             if(e.isEmployeeValid()) {
-                employeeDao.save(e);
-                return e;
+                return employeeDao.save(e);
             } else {
                 throw new InvalidEmployeeException();
             }
@@ -77,6 +104,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     *
+     * @param id employee ID.
+     * @return confirmation string
+     * @throws EmployeeNotFoundException
+     */
     @Override
     public String deleteEmployeeById(Integer id) throws EmployeeNotFoundException {
         Optional<Employee> emp = employeeDao.findById(id);
@@ -88,13 +121,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    /**
+     *
+     * @return confirmation string.
+     */
     @Override
     public String deleteAllEmployees() {
         employeeDao.deleteAll();
         return "All Employees deleted successfully!";
     }
 
-
+    /**
+     *
+     * @param id employee ID.
+     * @return Employee DTO object.
+     * @throws EmployeeNotFoundException
+     */
+    @Override
     public EmployeeDTO getEmployeeWithAddressById(Integer id) throws EmployeeNotFoundException {
         Optional<Employee> employee = employeeDao.findById(id);
         if(employee.isPresent()) {
@@ -102,13 +145,20 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeAddress employeeAddress = employeeAddressService.getEmployeeAddress(id);
             EmployeeDTO employeeDTO = new EmployeeDTO();
             employeeDTO.setEmployeeDetails(e);
-            employeeDTO.setAddress(employeeAddress.getAddress());
+            if(null != employeeAddress) {
+                employeeDTO.setAddress(employeeAddress.getAddress());
+            }
             return employeeDTO;
         } else {
-            throw new EmployeeNotFoundException();
+            throw new EmployeeNotFoundException("Employee with ID : " + id + " was not found!");
         }
     }
 
+    /**
+     *
+     * @return List of employee DTOs
+     */
+    @Override
     public List<EmployeeDTO> getAllEmployeesWithAddress() {
         List<Employee> employees = employeeDao.findAll();
         List<EmployeeDTO> employeeDTOS = new ArrayList<EmployeeDTO>(employees.size());
